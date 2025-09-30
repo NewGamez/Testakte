@@ -1,6 +1,6 @@
 function switchTab(tabId) {
   document.querySelectorAll('.tab-content').forEach(div => div.classList.add('hidden'));
-  const tabs = ['strafakte-tab', 'schnellakte-tab', 'kollektivakte-tab', 'dokumente-tab', 'weisungen-tab'];
+  const tabs = ['akten-tab', 'dokumente-tab', 'weisungen-tab'];
   tabs.forEach(id => {
     const btn = document.getElementById(id);
     if (tabId === id.replace('-tab', '')) {
@@ -12,206 +12,136 @@ function switchTab(tabId) {
   document.getElementById(tabId).classList.remove('hidden');
 }
 
-function formatDatum(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('de-DE');
+function switchAkte(akteId) {
+  document.querySelectorAll('.akte-form').forEach(div => div.classList.add('hidden'));
+  if (akteId) {
+    document.getElementById(akteId).classList.remove('hidden');
+  }
 }
 
 function openModal(content) {
-  document.getElementById('akteContent').textContent = content;
-  document.getElementById('akteModal').classList.remove('hidden');
+  document.getElementById("akteContent").innerText = content;
+  document.getElementById("akteModal").classList.remove("hidden");
 }
 
 function closeModal() {
-  document.getElementById('akteModal').classList.add('hidden');
+  document.getElementById("akteModal").classList.add("hidden");
 }
 
-// STRAFAKTE
+/* Strafakte */
 function generateStrafakte() {
-  const name = document.getElementById('st_nameDienst').value;
-  const tatort = document.getElementById('st_tatortTatzeit').value;
-  const beschuldigte = document.getElementById('st_beschuldigte').value;
-  const geschaedigte = document.getElementById('st_geschaedigte').value;
-  const sachverhalt = document.getElementById('st_sachverhalt').value;
-  const gegenstaende = document.getElementById('st_gegenstaende').value;
-  const abgenommenVon = document.getElementById('st_abgenommenVon').value;
-  const identitaet = document.getElementById('st_identitaet').value;
-  const weitere = document.getElementById('st_weitereEinheiten').value;
-  const eil = document.getElementById('st_eilverfahren').value;
-  const bussgeld = document.getElementById('st_bussgeld').value;
+  let officer = document.getElementById("st_nameDienst").value;
+  let tatort = document.getElementById("st_tatortTatzeit").value;
+  let beschuldigte = document.getElementById("st_beschuldigte").value;
+  let geschaedigte = document.getElementById("st_geschaedigte").value;
+  let sachverhalt = document.getElementById("st_sachverhalt").value;
+  let ident = document.getElementById("st_identitaet").value;
+  let einheiten = document.getElementById("st_weitereEinheiten").value;
+  let gegenstaende = document.getElementById("st_gegenstaende").value;
+  let abgenommen = document.getElementById("st_abgenommenVon").value;
+  let verlesen = document.getElementById("st_verlesen").value;
+  let beisein = document.getElementById("st_beisein").value;
+  let rechts = document.getElementById("st_rechtsbeistand").value;
+  let medizin = document.getElementById("st_medizin").value;
+  let eil = document.getElementById("st_eilverfahren").value;
+  let bussgeld = document.getElementById("st_bussgeld").value;
+  let gezeichnet = document.getElementById("st_gezeichnetVon").value;
 
-  const verlesen = document.getElementById('st_verlesen').value;
-  const beisein = document.getElementById('st_beisein').value;
-  const rechtsbeistand = document.getElementById('st_rechtsbeistand').value;
-  const medizin = document.getElementById('st_medizin').value;
+  let text = `--- Strafakte ---
+Officer: ${officer}
+Tatort/Zeit: ${tatort}
+Beschuldigte: ${beschuldigte}
+Geschädigte: ${geschaedigte}
+Sachverhalt: ${sachverhalt}
+Identität: ${ident}
+Beteiligte Einheiten: ${einheiten}
+Gegenstände: ${gegenstaende}
+Abgenommen von: ${abgenommen}
+Verlesen: ${verlesen}
+Beisein: ${beisein}
+Rechtsbeistand: ${rechts}
+Medizinische Versorgung: ${medizin}
+Eilverfahren abgelehnt durch: ${eil}
+Bußgeld: ${bussgeld}
+Gezeichnet von: ${gezeichnet}`;
 
-  let bemerkungen = `Die Rechte wurden dem Beschuldigten durch ${verlesen} im Beisein von ${beisein} verlesen und verstanden.\n`;
-  bemerkungen += `Dieser ${rechtsbeistand} auf einen Rechtsbeistand.\n`;
-  bemerkungen += `Der TV ${medizin} auf medizinische Versorgung.\n`;
-  bemerkungen += `Das Bußgeld ist bis zum ${formatDatum(bussgeld)} zu bezahlen.\n`;
-  bemerkungen += `Die dem Tatverdächtigen abgenommenen Gegenstände wurden in seinen persönlichen Spind gelegt.\n`;
-  if(eil) bemerkungen += `Das Eilverfahren wurde durch ${eil} abgelehnt.\n`;
-
-  const gezeichnetVon = document.getElementById('st_gezeichnetVon').value;
-
-const output = `
-| - Strafakte - |
-
-Narco City Police Department
-${name}
-
-| Tatort und Zeitraum: |
-${tatort}
-
-| Beschuldigte Person(en): |
-${beschuldigte}
-
-| Geschädigte Person(en): |
-${geschaedigte}
-
-| Sachverhalt aus Sicht des NCPDs: |
-${sachverhalt}
-
-Die Identität wurde mittels ${identitaet} festgestellt.
-
-| Weitere beteiligte Einheiten/Zeugen: |
-${weitere}
-
-| Abgenommene Gegenstände: | Abgenommen von: ${abgenommenVon}
-${gegenstaende}
-
-| Bemerkungen: |
-${bemerkungen}
-
-| Gezeichnet von: |
-${gezeichnetVon}
-`.trim();
-
-  openModal(output);
+  openModal(text);
 }
 
-// SCHNELLAKTE
+/* Schnellakte */
 function generateSchnellakte() {
-  const name = document.getElementById('sn_nameDienst').value;
-  const tatort = document.getElementById('sn_tatortTatzeit').value;
-  const beschuldigte = document.getElementById('sn_beschuldigte').value;
-  const geschaedigte = document.getElementById('sn_geschaedigte').value;
-  const sachverhalt = document.getElementById('sn_sachverhalt') ? document.getElementById('sn_sachverhalt').value : '';
-  const gegenstaende = document.getElementById('sn_gegenstaende').value;
-  const abgenommenVon = document.getElementById('sn_abgenommenVon').value;
-  const identitaet = document.getElementById('sn_identitaet').value;
-  const weitere = document.getElementById('sn_weitereEinheiten').value;
-  const bussgeld = document.getElementById('sn_bussgeld').value;
+  let officer = document.getElementById("sn_nameDienst").value;
+  let tatort = document.getElementById("sn_tatortTatzeit").value;
+  let beschuldigte = document.getElementById("sn_beschuldigte").value;
+  let geschaedigte = document.getElementById("sn_geschaedigte").value;
+  let ident = document.getElementById("sn_identitaet").value;
+  let einheiten = document.getElementById("sn_weitereEinheiten").value;
+  let gegenstaende = document.getElementById("sn_gegenstaende").value;
+  let abgenommen = document.getElementById("sn_abgenommenVon").value;
+  let verlesen = document.getElementById("sn_verlesen").value;
+  let beisein = document.getElementById("sn_beisein").value;
+  let rechts = document.getElementById("sn_rechtsbeistand").value;
+  let medizin = document.getElementById("sn_medizin").value;
+  let bussgeld = document.getElementById("sn_bussgeld").value;
+  let gezeichnet = document.getElementById("sn_gezeichnetVon").value;
 
-  const verlesen = document.getElementById('sn_verlesen').value;
-  const beisein = document.getElementById('sn_beisein').value;
-  const rechtsbeistand = document.getElementById('sn_rechtsbeistand').value;
-  const medizin = document.getElementById('sn_medizin').value;
+  let text = `--- Schnellakte ---
+Officer: ${officer}
+Tatort/Zeit: ${tatort}
+Beschuldigte: ${beschuldigte}
+Geschädigte: ${geschaedigte}
+Identität: ${ident}
+Beteiligte Einheiten: ${einheiten}
+Gegenstände: ${gegenstaende}
+Abgenommen von: ${abgenommen}
+Verlesen: ${verlesen}
+Beisein: ${beisein}
+Rechtsbeistand: ${rechts}
+Medizinische Versorgung: ${medizin}
+Bußgeld: ${bussgeld}
+Gezeichnet von: ${gezeichnet}`;
 
-  let bemerkungen = `Die Rechte wurden dem Beschuldigten durch ${verlesen} im Beisein von ${beisein} verlesen und verstanden.\n`;
-  bemerkungen += `Dieser ${rechtsbeistand} auf einen Rechtsbeistand.\n`;
-  bemerkungen += `Der TV ${medizin} auf medizinische Versorgung.\n`;
-  bemerkungen += `Das Bußgeld ist bis zum ${formatDatum(bussgeld)} zu bezahlen.\n`;
-  bemerkungen += `Die dem Tatverdächtigen abgenommenen Gegenstände wurden in seinen persönlichen Spind gelegt.\n`;
-
-  const gezeichnetVon = document.getElementById('sn_gezeichnetVon').value;
-
-  const output = `
-| - Schnellakte - |
-
-Narco City Police Department
-${name}
-
-| Tatort und Zeitraum: |
-${tatort}
-
-| Beschuldigte Person(en): |
-${beschuldigte}
-
-| Geschädigte Person(en): |
-${geschaedigte}
-
-Die Identität wurde mittels ${identitaet} festgestellt.
-
-| Weitere beteiligte Einheiten/Zeugen: |
-${weitere}
-
-| Abgenommene Gegenstände: | Abgenommen von: ${abgenommenVon}
-${gegenstaende}
-
-| Bemerkungen: |
-${bemerkungen}
-
-| Gezeichnet von: |
-${gezeichnetVon}
-`.trim();
-
-  openModal(output);
+  openModal(text);
 }
 
-// KOLLEKTIVAKTE
+/* Kollektivakte */
 function generateKollektivakte() {
-  const name = document.getElementById('k_nameDienst').value;
-  const tatort = document.getElementById('k_tatortTatzeit').value;
-  const beschuldigte = document.getElementById('k_beschuldigte').value;
-  const geschaedigte = document.getElementById('k_geschaedigte').value;
-  const sachverhalt = document.getElementById('k_sachverhalt').value;
-  const gegenstaende = document.getElementById('k_gegenstaende').value;
-  const abgenommenVon = document.getElementById('k_abgenommenVon').value;
-  const identitaet = document.getElementById('k_identitaet').value;
-  const weitere = document.getElementById('k_weitereEinheiten').value;
-  const bestaetigtVon = document.getElementById('k_bestaetigtVon').value;
-  const bestaetigtUm = document.getElementById('k_bestaetigtUm').value;
-  const bussgeld = document.getElementById('k_bussgeld').value;
+  let officer = document.getElementById("k_nameDienst").value;
+  let tatort = document.getElementById("k_tatortTatzeit").value;
+  let beschuldigte = document.getElementById("k_beschuldigte").value;
+  let geschaedigte = document.getElementById("k_geschaedigte").value;
+  let sachverhalt = document.getElementById("k_sachverhalt").value;
+  let ident = document.getElementById("k_identitaet").value;
+  let einheiten = document.getElementById("k_weitereEinheiten").value;
+  let gegenstaende = document.getElementById("k_gegenstaende").value;
+  let abgenommen = document.getElementById("k_abgenommenVon").value;
+  let verlesen = document.getElementById("k_verlesen").value;
+  let beisein = document.getElementById("k_beisein").value;
+  let rechts = document.getElementById("k_rechtsbeistand").value;
+  let medizin = document.getElementById("k_medizin").value;
+  let bussgeld = document.getElementById("k_bussgeld").value;
+  let bestaetigtVon = document.getElementById("k_bestaetigtVon").value;
+  let bestaetigtUm = document.getElementById("k_bestaetigtUm").value;
+  let gezeichnet = document.getElementById("k_gezeichnetVon").value;
 
-  const verlesen = document.getElementById('k_verlesen').value;
-  const beisein = document.getElementById('k_beisein').value;
-  const rechtsbeistand = document.getElementById('k_rechtsbeistand').value;
-  const medizin = document.getElementById('k_medizin').value;
+  let text = `--- Kollektivakte ---
+Officer: ${officer}
+Tatort/Zeit: ${tatort}
+Beschuldigte: ${beschuldigte}
+Geschädigte: ${geschaedigte}
+Sachverhalt: ${sachverhalt}
+Identität: ${ident}
+Beteiligte Einheiten: ${einheiten}
+Gegenstände: ${gegenstaende}
+Abgenommen von: ${abgenommen}
+Verlesen: ${verlesen}
+Beisein: ${beisein}
+Rechtsbeistand: ${rechts}
+Medizinische Versorgung: ${medizin}
+Bußgeld: ${bussgeld}
+Bestätigt von: ${bestaetigtVon}
+Bestätigt um: ${bestaetigtUm}
+Gezeichnet von: ${gezeichnet}`;
 
-  let bemerkungen = `Die Rechte wurden den Beschuldigten durch ${verlesen} im Beisein von ${beisein} verlesen und verstanden.\n`;
-  bemerkungen += `Diese ${rechtsbeistand} auf einen Rechtsbeistand.\n`;
-  bemerkungen += `Die TV's ${medizin} auf medizinische Versorgung.\n`;
-  bemerkungen += `Das Bußgeld ist bis zum ${formatDatum(bussgeld)} zu bezahlen.\n`;
-  bemerkungen += `Die dem Tatverdächtigen abgenommenen Gegenstände wurden in seinen persönlichen Spind gelegt.\n`;
-
-  const gezeichnetVon = document.getElementById('k_gezeichnetVon').value;
-
-  const output = `
-| - Kollektivakte - |
-
-Narco City Police Department
-${name}
-
-| Tatort und Zeitraum: |
-${tatort}
-
-| Beschuldigte Person(en): |
-${beschuldigte}
-
-| Geschädigte Person(en): |
-${geschaedigte}
-
-| Sachverhalt: |
-${sachverhalt}
-
-Die Identität wurde mittels ${identitaet} festgestellt.
-
-| Weitere beteiligte Einheiten/Zeugen: |
-${weitere}
-
-| Abgenommene Gegenstände: | Abgenommen von: ${abgenommenVon}
-${gegenstaende}
-
-| Bemerkungen: |
-${bemerkungen}
-
-Kollektivakte wurde von ${bestaetigtVon} um ${bestaetigtUm} genehmigt.
-
-| Gezeichnet von: |
-${gezeichnetVon}
-`.trim();
-
-  openModal(output);
+  openModal(text);
 }
